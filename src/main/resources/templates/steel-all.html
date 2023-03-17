@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>钢材信息管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" th:href="@{/static/css/font.css}">
+    <link rel="stylesheet" th:href="@{/static/css/xadmin.css}">
+    <script type="text/javascript" th:src="@{/static/js/jquery-1.12.3.min.js}"></script>
+    <script th:src="@{/static/lib/layui/layui.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:src="@{/static/js/xadmin.js}"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body class="layui-anim layui-anim-up">
+<div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a>
+          <cite>钢材管理</cite></a>
+      </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+</div>
+<div class="x-body">
+    <div class="layui-row">
+        <div class="layui-form layui-col-md12 x-so">
+            <div class="layui-input-inline">
+                <select name="steelStatus" id="gtype">
+                    <option value="">钢材状态</option>
+                    <option value="1">启用</option>
+                    <option value="2">未启用</option>
+                </select>
+            </div>
+            <input type="text" name="steelName"  placeholder="请输入钢材名称" autocomplete="off" class="layui-input">
+            <input type="text" name="steelType"  placeholder="请输入钢材种类" autocomplete="off" class="layui-input">
+            <input type="text" name="steelInMoney"  placeholder="请输入钢材价格" autocomplete="off" class="layui-input">
+            <button class="layui-btn" type="button" id="search"><i class="layui-icon">&#xe615;</i></button>
+            <button class="layui-btn" onclick="x_admin_show('添加新钢材','view?url=steel-add',500,500)"><i class="layui-icon"></i>添加新钢材</button>
+        </div>
+    </div>
+    <table id="table" class="layui-table" lay-filter="table"></table>
+</div>
+
+<script type="text/html" id="table-toolbarr">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="in">进货</button>
+        <button class="layui-btn layui-btn-sm" lay-event="out">出货</button>
+    </div>
+</script>
+<script type="text/html" id="table-toolbar">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="use">更改状态</button>
+        <button class="layui-btn layui-btn-sm" lay-event="edit">编辑</button>
+    </div>
+</script>
+
+<script>
+    layui.use(['table','form'], function(){
+        var table = layui.table,
+            form = layui.form;
+        var tables = table.render({
+            elem: '#table'
+            ,url: 'selectProduct'
+            ,method: 'post'
+            ,page: true
+            ,text : '钢材信息不存在！'
+            ,request: {
+                pageNum: 1 //页码的参数名称，默认：page
+                ,pageSize: 10//数据量的参数名，默认：limit
+            }
+            ,cols: [
+                [
+                    {field: 'pid', title: '序号',type:'numbers'}
+                    ,{field: 'steelName', title: '钢材名称'}
+                    ,{field: 'steelType', title: '钢材类别'}
+                    ,{field: 'steelNum', title: '总根数'}
+                    ,{field: 'steelTon', title: '总吨数'}
+                    ,{field: 'steelInMoney', title: '进货单价'}
+                    ,{field: 'steelStatus', title: '是否启用'}
+                    ,{field: 'steelDescription', title: '货物描述'}
+                    ,{title: '货物管理', align: 'center', fixed: 'right', toolbar: '#table-toolbarr'}
+                    ,{title: '操作', align: 'center', fixed: 'right', toolbar: '#table-toolbar'}
+                ]
+            ]
+            ,toolbar : false
+            ,defaultToolbar: ['exports']
+            ,done:function(res, curr, count){
+                $("[data-field = 'steelStatus']").children().each(function(){
+                    if($(this).text() == '1'){
+                        $(this).text("启用");
+                    }else if($(this).text() == '0'){
+                        $(this).text("未启用");
+                    }
+                });
+            }
+        });
+
+        $("#search").on("click", function () {
+            tables.reload({
+                url: "selectProduct"
+                ,where: { //设定异步数据接口的额外参数，任意设
+                    steelStatus : $("#gtype").val(),
+                    steelName : $("input[name='steelName']").val(),
+                    steelType : $("input[name='steelType']").val(),
+                    steelInMoney : $("input[name='steelInMoney']").val()
+                }
+            });
+        })
+
+
+        //监听事件
+        table.on('tool(table)', function(obj){
+            var datas = obj.data;
+            console.log(obj)
+
+            if(obj.event === 'in'){
+                layer.open({
+                    type: 2,
+                    title: false,
+                    closeBtn: 0,
+                    content: 'view?url=steel-in',
+                    area: ['40%', '30%'],
+                    shadeClose:true,
+                    success: function (layero, index) {
+                        var body = layer.getChildFrame('body', index);
+                        body.find("#sid").val(datas.sid);
+                        body.find("#steelInMoney").val(datas.steelInMoney);
+                        body.find("#steelName").val(datas.steelName);
+                        body.find("#steelNum").val(datas.steelNum);
+                        body.find("#steelTon").val(datas.steelTon);
+                        body.find("#steelType").val(datas.steelType);
+                        body.find("#steelDescription").val(datas.steelDescription);
+                    }
+                })
+            }
+            if(obj.event === 'out'){
+                layer.open({
+                    type: 2,
+                    title: false,
+                    closeBtn: 0,
+                    content: 'view?url=steel-out',
+                    area: ['40%', '30%'],
+                    shadeClose:true,
+                    success: function (layero, index) {
+                        var body = layer.getChildFrame('body', index);
+                        body.find("#sid").val(datas.sid);
+                        body.find("#steelInMoney").val(datas.steelInMoney);
+                        body.find("#steelName").val(datas.steelName);
+                        body.find("#steelNum").val(datas.steelNum);
+                        body.find("#steelTon").val(datas.steelTon);
+                        body.find("#steelType").val(datas.steelType);
+                        body.find("#steelDescription").val(datas.steelDescription);
+                    }
+                })
+            }
+            if(obj.event === 'use'){
+                layer.confirm('确认要更改状态吗？',function(){
+                    //发异步删除数据
+                    var steelStatus;
+                    if(datas.steelStatus == 0){
+                        steelStatus = 1;
+                    }
+                    if(datas.steelStatus == 1){
+                        steelStatus = 0;
+                    }
+                    $.ajax({
+                        url: "updateSteel",
+                        datatype: "json",
+                        type: "post",
+                        data: {
+                            sid: datas.sid,
+                            steelStatus: steelStatus
+                        },
+                        success: function(req){
+                            layer.msg('已更改!',{icon:1,time:1000});
+                            layui.table.reload("table");
+                        }
+                    });
+                });
+            }
+            if(obj.event === 'edit'){
+                layer.open({
+                    type: 2,
+                    title: false,
+                    closeBtn: 0,
+                    content: 'view?url=steel-edit',
+                    area: ['40%', '60%'],
+                    shadeClose:true,
+                    success: function (layero, index) {
+                        var body = layer.getChildFrame('body', index);
+                        body.find("#sid").val(datas.sid);
+                        body.find("#steelInMoney").val(datas.steelInMoney);
+                        body.find("#steelName").val(datas.steelName);
+                        body.find("#steelNum").val(datas.steelNum);
+                        body.find("#steelTon").val(datas.steelTon);
+                        body.find("#steelType").val(datas.steelType);
+                        body.find("#steelDescription").val(datas.steelDescription);
+                    }
+                })
+            }
+        });
+
+    });
+
+</script>
+</body>
+
+</html>

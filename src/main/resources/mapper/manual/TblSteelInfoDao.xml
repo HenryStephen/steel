@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bro.steel.dao.manual.TblSteelInfoDao">
+    <resultMap id="BaseResultMap" type="com.bro.steel.entity.TblSteelInfo">
+        <id column="sid" jdbcType="INTEGER" property="sid" />
+        <result column="steel_name" jdbcType="VARCHAR" property="steelName" />
+        <result column="steel_type" jdbcType="DOUBLE" property="steelType" />
+        <result column="steel_num" jdbcType="DOUBLE" property="steelNum" />
+        <result column="steel_ton" jdbcType="DOUBLE" property="steelTon" />
+        <result column="steel_in_money" jdbcType="DOUBLE" property="steelInMoney" />
+        <result column="steel_status" jdbcType="INTEGER" property="steelStatus" />
+        <result column="steel_description" jdbcType="VARCHAR" property="steelDescription" />
+    </resultMap>
+    <sql id="Base_Column_List">
+    sid, steel_name, steel_type, steel_num, steel_ton, steel_in_money, steel_status,steel_description
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from tbl_steel_info
+        where sid = #{sid,jdbcType=INTEGER}
+    </select>
+    <select id="selectSteelByName" parameterType="com.bro.steel.entity.TblSteelInfo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from tbl_steel_info
+      <where>
+          <if test="steelName !=null and steelName !=''">
+              and steel_name=#{steelName,jdbcType=VARCHAR}
+          </if>
+          <if test="steelType!=null and steelType !=''">
+              and steel_type=#{steelType,jdbcType=DOUBLE}
+          </if>
+          <if test="steelInMoney!=null and steelInMoney !=''">
+              and steel_in_money=#{steelInMoney,jdbcType=DOUBLE}
+          </if>
+      </where>
+    </select>
+    <select id="selectList" parameterType="com.bro.steel.entity.TblSteelInfo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from tbl_steel_info
+        <where>
+            <if test="steelName !=null and steelName !=''">
+                and steel_name like CONCAT(CONCAT ('%',#{steelName,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="steelType!=null and steelType !=''">
+                and steel_type=#{steelType,jdbcType=DOUBLE}
+            </if>
+            <if test="steelStatus != null">
+                and steel_status = #{steelStatus,jdbcType=INTEGER}
+            </if>
+            <if test="steelInMoney!=null and steelInMoney !=''">
+                and steel_in_money=#{steelInMoney,jdbcType=DOUBLE}
+            </if>
+        </where>
+        order by steel_name asc
+    </select>
+    <update id="addOldProduct" parameterType="com.bro.steel.vo.TblSteelInfoVo">
+        update tbl_steel_info
+        <set>
+            <if test="steelName != null">
+                steel_name = #{steelName,jdbcType=VARCHAR},
+            </if>
+            <if test="steelType != null">
+                steel_type = #{steelType,jdbcType=DOUBLE},
+            </if>
+            <if test="steelNum != null">
+                steel_num = #{steelNum,jdbcType=DOUBLE},
+            </if>
+            <if test="steelTon != null">
+                steel_ton = #{steelTon,jdbcType=DOUBLE},
+            </if>
+            <if test="steelInMoney != null">
+                steel_in_money = #{steelInMoney,jdbcType=DOUBLE},
+            </if>
+            <if test="steelStatus != null">
+                steel_status = #{steelStatus,jdbcType=INTEGER},
+            </if>
+            <if test="steelDescription!=null">
+                steelDescription=#{steelDescription,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where sid = #{sid,jdbcType=INTEGER}
+    </update>
+    <update id="disOldProduct" parameterType="com.bro.steel.entity.TblSteelInfo">
+        update tbl_steel_info
+        <set>
+            <if test="steelName != null">
+                steel_name = #{steelName,jdbcType=VARCHAR},
+            </if>
+            <if test="steelType != null">
+                steel_type = #{steelType,jdbcType=DOUBLE},
+            </if>
+            <if test="steelNum != null">
+                steel_num = #{steelNum,jdbcType=DOUBLE},
+            </if>
+            <if test="steelTon != null">
+                steel_ton = #{steelTon,jdbcType=DOUBLE},
+            </if>
+            <if test="steelInMoney != null">
+                steel_in_money = #{steelInMoney,jdbcType=DOUBLE},
+            </if>
+            <if test="steelStatus != null">
+                steel_status = #{steelStatus,jdbcType=INTEGER},
+            </if>
+            <if test="steelDescription!=null">
+                steelDescription=#{steelDescription,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where sid = #{sid,jdbcType=INTEGER}
+    </update>
+</mapper>

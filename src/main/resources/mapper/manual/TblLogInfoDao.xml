@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bro.steel.dao.manual.TblLogInfoDao">
+    <resultMap id="BaseResultMap" type="com.bro.steel.vo.TblLogInfoVo">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="operator_name" jdbcType="VARCHAR" property="operatorName" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="type" jdbcType="DOUBLE" property="type" />
+        <result column="num" jdbcType="DOUBLE" property="num" />
+        <result column="operator_time" jdbcType="TIMESTAMP" property="operatorTime" />
+        <result column="ton" jdbcType="DOUBLE" property="ton" />
+        <result column="money" jdbcType="DOUBLE" property="money" />
+        <result column="su_id" javaType="INTEGER" property="suId" />
+    </resultMap>
+    <resultMap id="BaseResultMap_1" type="com.bro.steel.vo.TblLogInfoVo">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="operator_name" jdbcType="VARCHAR" property="operatorName" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="type" jdbcType="DOUBLE" property="type" />
+        <result column="num" jdbcType="DOUBLE" property="num" />
+        <result column="operator_time" jdbcType="TIMESTAMP" property="operatorTime" />
+        <result column="ton" jdbcType="DOUBLE" property="ton" />
+        <result column="money" jdbcType="DOUBLE" property="money" />
+        <result column="su_id" javaType="INTEGER" property="suId" />
+        <result column="su_name" jdbcType="VARCHAR" property="suName" />
+    </resultMap>
+    <sql id="Base_Column_List">
+      id, operator_name, name, type, num, operator_time,ton,money,su_id
+    </sql>
+
+   <select id="selectLogList" parameterType="com.bro.steel.vo.TblLogInfoVo" resultMap="BaseResultMap_1">
+       select
+       a.id "id", a.operator_name "operator_name", a.name "name", a.type "type", a.num "num", a.operator_time "operator_time", a.ton "ton", a.money "money", a.su_id "su_id", b.name "su_name"
+       from tbl_log_info as a
+       left join tbl_supplier_info as b
+       on a.su_id = b.id
+       <where>
+           <if test="operatorName != null and operatorName != ''">
+             and operator_name like CONCAT(CONCAT ('%',#{operatorName,jdbcType=VARCHAR}),'%')
+           </if>
+           <if test="name != null and name != ''">
+               and name like CONCAT(CONCAT ('%',#{name,jdbcType=VARCHAR}),'%')
+           </if>
+           <if test="type != null">
+               and type = #{type,jdbcType=DOUBLE}
+           </if>
+           <if test="money != null">
+               and money = #{money}
+           </if>
+           <if test="previousTime!=null" >
+               and operator_time &lt;= #{previousTime}
+           </if>
+           <if test="operatorTime!=null" >
+               and operator_time >= #{operatorTime}
+           </if>
+       </where>
+   </select>
+    <insert id="insertLog" parameterType="com.bro.steel.vo.TblLogInfoVo">
+        insert into tbl_log_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="operatorName != null">
+                operator_name,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="num != null">
+                num,
+            </if>
+            <if test="operatorTime != null">
+                operator_time,
+            </if>
+            <if test="ton != null">
+                ton,
+            </if>
+            <if test="money != null">
+                money,
+            </if>
+            <if test="suId != null">
+                su_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="operatorName != null">
+                #{operatorName,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=DOUBLE},
+            </if>
+            <if test="num != null">
+                #{num,jdbcType=DOUBLE},
+            </if>
+            <if test="operatorTime != null">
+                #{operatorTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="ton != null">
+                #{ton,jdbcType=DOUBLE},
+            </if>
+            <if test="money != null">
+                #{money,jdbcType=DOUBLE},
+            </if>
+            <if test="suId != null">
+                #{suId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+</mapper>

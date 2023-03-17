@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bro.steel.dao.auto.TblLogInfoMapper">
+  <resultMap id="BaseResultMap" type="com.bro.steel.entity.TblLogInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="operator_name" jdbcType="VARCHAR" property="operatorName" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="type" jdbcType="DOUBLE" property="type" />
+    <result column="num" jdbcType="DOUBLE" property="num" />
+    <result column="operator_time" jdbcType="TIMESTAMP" property="operatorTime" />
+    <result column="ton" jdbcType="DOUBLE" property="ton" />
+    <result column="money" jdbcType="DOUBLE" property="money" />
+    <result column="su_id" javaType="INTEGER" property="suId"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, operator_name, name, type, num, operator_time, su_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_log_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tbl_log_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bro.steel.entity.TblLogInfo">
+    insert into tbl_log_info (id, operator_name, name, 
+      type, num, operator_time, sub_id
+      )
+    values (#{id,jdbcType=INTEGER}, #{operatorName,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{type,jdbcType=DOUBLE}, #{num,jdbcType=DOUBLE}, #{operatorTime,jdbcType=TIMESTAMP}, #{suId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.bro.steel.entity.TblLogInfo">
+    insert into tbl_log_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="operatorName != null">
+        operator_name,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="num != null">
+        num,
+      </if>
+      <if test="operatorTime != null">
+        operator_time,
+      </if>
+      <if test="ton != null">
+        ton,
+      </if>
+      <if test="money != null">
+        money,
+      </if>
+      <if test="suId != null">
+        su_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="operatorName != null">
+        #{operatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=DOUBLE},
+      </if>
+      <if test="num != null">
+        #{num,jdbcType=DOUBLE},
+      </if>
+      <if test="operatorTime != null">
+        #{operatorTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ton != null">
+        #{ton,jdbcType=DOUBLE},
+      </if>
+      <if test="money != null">
+        #{money,jdbcType=DOUBLE},
+      </if>
+      <if test="suId != null">
+        #{suId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bro.steel.entity.TblLogInfo">
+    update tbl_log_info
+    <set>
+      <if test="operatorName != null">
+        operator_name = #{operatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=DOUBLE},
+      </if>
+      <if test="num != null">
+        num = #{num,jdbcType=DOUBLE},
+      </if>
+      <if test="operatorTime != null">
+        operator_time = #{operatorTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ton != null">
+        ton = #{ton,jdbcType=DOUBLE},
+      </if>
+      <if test="money != null">
+        money = #{money,jdbcType=DOUBLE},
+      </if>
+      <if test="suId != null">
+        su_id = #{suId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bro.steel.entity.TblLogInfo">
+    update tbl_log_info
+    set operator_name = #{operatorName,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      type = #{type,jdbcType=DOUBLE},
+      num = #{num,jdbcType=DOUBLE},
+      operator_time = #{operatorTime,jdbcType=TIMESTAMP},
+      ton = #{ton,jdbcType=DOUBLE},
+      money = #{money,jdbcType=DOUBLE},
+      su_id = #{suId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

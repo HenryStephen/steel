@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bro.steel.dao.auto.TblSteelInfoMapper">
+  <resultMap id="BaseResultMap" type="com.bro.steel.entity.TblSteelInfo">
+    <id column="sid" jdbcType="INTEGER" property="sid" />
+    <result column="steel_name" jdbcType="VARCHAR" property="steelName" />
+    <result column="steel_type" jdbcType="DOUBLE" property="steelType" />
+    <result column="steel_num" jdbcType="DOUBLE" property="steelNum" />
+    <result column="steel_ton" jdbcType="DOUBLE" property="steelTon" />
+    <result column="steel_in_money" jdbcType="DOUBLE" property="steelInMoney" />
+    <result column="steel_status" jdbcType="INTEGER" property="steelStatus" />
+    <result column="steel_description" jdbcType="VARCHAR" property="steelDescription" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    sid, steel_name, steel_type, steel_num, steel_ton, steel_in_money, steel_status,steel_description
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_steel_info
+    where sid = #{sid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tbl_steel_info
+    where sid = #{sid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bro.steel.entity.TblSteelInfo">
+    insert into tbl_steel_info (sid, steel_name, steel_type, 
+      steel_num, steel_ton, steel_in_money, 
+      steel_status)
+    values (#{sid,jdbcType=INTEGER}, #{steelName,jdbcType=VARCHAR}, #{steelType,jdbcType=DOUBLE}, 
+      #{steelNum,jdbcType=DOUBLE}, #{steelTon,jdbcType=DOUBLE}, #{steelInMoney,jdbcType=DOUBLE}, 
+      #{steelStatus,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bro.steel.entity.TblSteelInfo">
+    insert into tbl_steel_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="sid != null">
+        sid,
+      </if>
+      <if test="steelName != null">
+        steel_name,
+      </if>
+      <if test="steelType != null">
+        steel_type,
+      </if>
+      <if test="steelNum != null">
+        steel_num,
+      </if>
+      <if test="steelTon != null">
+        steel_ton,
+      </if>
+      <if test="steelInMoney != null">
+        steel_in_money,
+      </if>
+      <if test="steelStatus != null">
+        steel_status,
+      </if>
+      <if test="steelDescription !=null">
+        steel_description,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="sid != null">
+        #{sid,jdbcType=INTEGER},
+      </if>
+      <if test="steelName != null">
+        #{steelName,jdbcType=VARCHAR},
+      </if>
+      <if test="steelType != null">
+        #{steelType,jdbcType=DOUBLE},
+      </if>
+      <if test="steelNum != null">
+        #{steelNum,jdbcType=DOUBLE},
+      </if>
+      <if test="steelTon != null">
+        #{steelTon,jdbcType=DOUBLE},
+      </if>
+      <if test="steelInMoney != null">
+        #{steelInMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="steelStatus != null">
+        #{steelStatus,jdbcType=INTEGER},
+      </if>
+      <if test="steelDescription != null">
+        #{steelDescription,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bro.steel.entity.TblSteelInfo">
+    update tbl_steel_info
+    <set>
+      <if test="steelName != null">
+        steel_name = #{steelName,jdbcType=VARCHAR},
+      </if>
+      <if test="steelType != null">
+        steel_type = #{steelType,jdbcType=DOUBLE},
+      </if>
+      <if test="steelNum != null">
+        steel_num = #{steelNum,jdbcType=DOUBLE},
+      </if>
+      <if test="steelTon != null">
+        steel_ton = #{steelTon,jdbcType=DOUBLE},
+      </if>
+      <if test="steelInMoney != null">
+        steel_in_money = #{steelInMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="steelStatus != null">
+        steel_status = #{steelStatus,jdbcType=INTEGER},
+      </if>
+      <if test="steelDescription !=null">
+         steel_description = #{steelDescription,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where sid = #{sid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bro.steel.entity.TblSteelInfo">
+    update tbl_steel_info
+    set steel_name = #{steelName,jdbcType=VARCHAR},
+      steel_type = #{steelType,jdbcType=DOUBLE},
+      steel_num = #{steelNum,jdbcType=DOUBLE},
+      steel_ton = #{steelTon,jdbcType=DOUBLE},
+      steel_in_money = #{steelInMoney,jdbcType=DOUBLE},
+      steel_status = #{steelStatus,jdbcType=INTEGER}
+    where sid = #{sid,jdbcType=INTEGER}
+  </update>
+</mapper>

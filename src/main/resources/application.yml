@@ -1,0 +1,32 @@
+server:
+  port: 8080
+spring:
+  resources:
+    static-locations: /static/
+  thymeleaf:
+    cache: false
+    enabled: true
+    encoding: utf-8
+    mode: LEGACYHTML5
+    prefix: classpath:/templates/
+    suffix: .html
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/steel?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 100MB
+#Mybatis配置文件
+mybatis:
+  typeAliasesPackage: com.bro.steel.entity
+  mapperLocations: classpath:mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+logging:
+  level:
+    com.shixun.library.dao.manual : debug
+pagehelper:
+  helper-dialect: mysql

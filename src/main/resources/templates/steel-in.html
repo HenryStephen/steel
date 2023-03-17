@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>钢材编辑</title>
+    <link rel="stylesheet" th:href="@{/static/css/font.css}">
+    <link rel="stylesheet" th:href="@{/static/css/xadmin.css}">
+</head>
+<body>
+<div class="x-body">
+    <div class="layui-form-item">
+        <input id="sid" type="hidden">
+        <input type="hidden" id="steelName" name="steelName" required="" lay-verify="steelName"
+               autocomplete="off" class="layui-input" >
+        <input type="hidden" id="steelType" name="steelType" required="" lay-verify="steelType"
+               autocomplete="off" class="layui-input">
+        <input type="hidden" id="steelNum" name="steelNum" required="" lay-verify="steelNum"
+               autocomplete="off" class="layui-input">
+        <input type="hidden" id="steelTon" name="steelTon" required="" lay-verify="steelTon" autocomplete="off"
+               class="layui-input" >
+        <input type="hidden" id="steelInMoney" name="steelInMoney" required="" lay-verify="steelInMoney"
+               autocomplete="off" class="layui-input">
+    </div>
+    <div class="layui-form-item">
+        <label for="number" class="layui-form-label">
+            <span class="x-red">*</span>进货根数
+        </label>
+        <div class="layui-input-inline">
+            <input type="text" id="number" name="number" required="" lay-verify="number"
+                   autocomplete="off" class="layui-input" >
+        </div>
+        <label for="suId" class="layui-form-label">
+            <span class="x-red">*</span>供应商名称
+        </label>
+        <div class="layui-input-inline">
+            <select name="suId" id="suId">
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-form layui-col-md12 x-so">
+            <button class="layui-btn" type="button" id="modify">确定</button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{/static/js/jquery-1.12.3.min.js}"></script>
+<script th:src="@{/static/lib/layui/layui.js}" charset="utf-8"></script>
+<script type="text/javascript" th:src="@{/static/js/xadmin.js}"></script>
+<script>
+    layui.use(['form','layer'], function() {
+        $ = layui.jquery;
+        var form = layui.form
+            , layer = layui.layer;
+        $.ajax({
+            url: 'selectSC',
+            dataType: 'json',
+            type: 'get',
+            data:{
+                type: 0 //代表供应商
+            },
+            success: function (data) {
+                var data1 = data.data;
+                $.each(data1, function (index, item) {
+                    $('#suId').append(new Option(item.name, item.id));// 下拉菜单里添加元素
+                });
+                layui.form.render("select");
+            }
+        });
+        $("#modify").click(function () {
+            var num = parseInt($('#number').val())+parseInt($('#steelNum').val());
+            console.log(num);
+            console.log($('#number').val());
+            console.log($("#steelTon").val());
+            $.ajax({
+                url: "addOldProduct",
+                type: "post",
+                dataType: "json",
+                data: {
+                    sid: $("#sid").val(),
+                    steelName: $("#steelName").val(),
+                    steelType: $("#steelType").val(),
+                    steelNum: num,
+                    steelTon: $("#steelTon").val(),
+                    steelInMoney: $("#steelInMoney").val(),
+                    steelDescription: $("#steelDescription").val(),
+                    suId: $("#suId").val()
+                },
+                success: function (res) {
+                    if(res.status == 1){
+                        //刷新父级数据表格
+                        parent.layui.table.reload("table");
+                        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                        parent.layer.close(index); //再执行关闭
+                        parent.layer.msg("修改成功",{icon:1,time:1000})
+                    }
+                }
+            })
+        });
+    });
+
+</script>
+</body>
+</html>
